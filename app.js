@@ -167,19 +167,37 @@ $("#apartamentos-container").on("click", ".btn-ver-detalhes", function (event) {
     $("#modalImovelBanheiros").text(`Banheiros: ${apartamento.banheiros}`);
     $("#modalImovelContato").text(`Contato: ${apartamento.contato}`);
 
+    // Remove qualquer botão "Deletar Anúncio" existente
+    $(".btn-deletar-anuncio").remove();
+
+    // Adiciona o botão de Deletar Anúncio
+    $("#modalImovelContato").after(
+      `<button class="btn btn-danger btn-deletar-anuncio" data-id="${apartamento.id}">Deletar Anúncio</button>`
+    );
+
     const carouselInner = $("#carouselImovel .carousel-inner");
     carouselInner.empty();
 
-    if (apartamento.fotos && apartamento.fotos.length > 0) {
-      apartamento.fotos.forEach((foto, index) => {
+    // Convertendo apartamento.fotos para um array, se necessário
+    if (typeof apartamento.fotos === "string") {
+      apartamento.fotos = JSON.parse(apartamento.fotos);
+    }
+
+    if (Array.isArray(apartamento.fotos) && apartamento.fotos.length > 0) {
+      apartamento.fotos.forEach((fotoData, index) => {
         const item = $("<div></div>")
           .addClass("carousel-item")
           .appendTo(carouselInner);
         if (index === 0) item.addClass("active");
-        $("<img>").addClass("d-block w-100").attr("src", foto).appendTo(item);
+        const fotoSrc = fotoData.startsWith("data:")
+          ? fotoData
+          : `data:image/jpeg;base64,${fotoData}`;
+        $("<img>")
+          .addClass("d-block w-100")
+          .attr("src", fotoSrc)
+          .appendTo(item);
       });
     } else {
-      // Se não houver fotos, você pode exibir uma mensagem ou fazer outra coisa
       carouselInner.append("<p>Nenhuma foto disponível</p>");
     }
 
@@ -229,6 +247,38 @@ $("#btn-criar-anuncio").click(function (event) {
 });
 
 // Evento de mudança no campo de input de arquivo
+// $("#foto").on("change", function () {
+//   const files = $(this)[0].files; // Captura os arquivos selecionados pelo usuário
+
+//   // Verifica se há arquivos selecionados
+//   if (files.length > 0) {
+//     // Loop sobre os arquivos selecionados
+//     for (let i = 0; i < files.length; i++) {
+//       const file = files[i];
+
+//       // Verifica se o arquivo é uma imagem
+//       if (file.type.match("image.*")) {
+//         // Crie um objeto URL temporário para a imagem
+//         const imageUrl = URL.createObjectURL(file);
+
+//         // Aqui você pode fazer o que quiser com a imagem,
+//         // como exibi-la em uma prévia ou fazer upload dela para o servidor.
+
+//         console.log(imageUrl);
+//         // Por exemplo, exibindo uma prévia da imagem:
+//         const preview = $("<img>")
+//           .attr("src", imageUrl)
+//           .addClass("img-thumbnail");
+//         $("#foto-preview").append(preview);
+//       } else {
+//         // Se o arquivo não for uma imagem, você pode lidar com isso aqui
+//         console.log("O arquivo selecionado não é uma imagem.");
+//       }
+//     }
+//   }
+// });
+
+// Evento de mudança no campo de input de arquivo
 $("#foto").on("change", function () {
   const files = $(this)[0].files; // Captura os arquivos selecionados pelo usuário
 
@@ -238,21 +288,32 @@ $("#foto").on("change", function () {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
 
+      // Crie um novo FileReader
+      const reader = new FileReader();
+
+      // Defina o evento onload para executar quando a leitura for concluída
+      reader.onload = function (event) {
+        // A variável event.target.result contém o conteúdo do arquivo em base64
+        const base64String = event.target.result;
+        console.log("Base64 da imagem:", base64String);
+
+        // Aqui você pode fazer o que quiser com o base64 da imagem,
+        // como enviá-lo para o servidor ou realizar outras operações.
+      };
+
+      // Ler o conteúdo do arquivo como uma URL de dados (data URL)
+      reader.readAsDataURL(file);
+
       // Verifica se o arquivo é uma imagem
       if (file.type.match("image.*")) {
-        // Crie um objeto URL temporário para a imagem
         const imageUrl = URL.createObjectURL(file);
 
-        // Aqui você pode fazer o que quiser com a imagem,
-        // como exibi-la em uma prévia ou fazer upload dela para o servidor.
-
-        // Por exemplo, exibindo uma prévia da imagem:
+        console.log(imageUrl);
         const preview = $("<img>")
           .attr("src", imageUrl)
           .addClass("img-thumbnail");
         $("#foto-preview").append(preview);
       } else {
-        // Se o arquivo não for uma imagem, você pode lidar com isso aqui
         console.log("O arquivo selecionado não é uma imagem.");
       }
     }
