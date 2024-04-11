@@ -234,6 +234,38 @@ function exibirDetalhes(id) {
   }
 }
 
+// Evento de clique no botão "Deletar Anúncio"
+$("#modalDetalhes").on("click", ".btn-deletar-anuncio", function (event) {
+  const apartamentoId = $(this).data("id");
+
+  // Chama a função para deletar o anúncio
+  deletarAnuncio(apartamentoId);
+});
+
+// Função para deletar o anúncio
+function deletarAnuncio(apartamentoId) {
+  // Fazer a requisição DELETE para a API
+  fetch(`http://localhost:3000/apartamentos/${apartamentoId}`, {
+    method: "DELETE",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro ao deletar o anúncio.");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Anúncio deletado com sucesso:", data);
+      // Aqui você pode fazer algo após deletar o anúncio, se necessário
+      // Por exemplo, atualizar a lista de apartamentos exibidos na página
+      // ou fechar o modal de detalhes do imóvel
+      $("#modalDetalhes").modal("hide");
+    })
+    .catch((error) => {
+      console.error("Erro ao deletar o anúncio:", error);
+    });
+}
+
 // Evento de clique no botão "Criar Anúncio"
 $("#btn-criar-anuncio").click(function () {
   // Limpar o formulário de criação de anúncio
@@ -247,38 +279,6 @@ $("#btn-criar-anuncio").click(function (event) {
 });
 
 // Evento de mudança no campo de input de arquivo
-// $("#foto").on("change", function () {
-//   const files = $(this)[0].files; // Captura os arquivos selecionados pelo usuário
-
-//   // Verifica se há arquivos selecionados
-//   if (files.length > 0) {
-//     // Loop sobre os arquivos selecionados
-//     for (let i = 0; i < files.length; i++) {
-//       const file = files[i];
-
-//       // Verifica se o arquivo é uma imagem
-//       if (file.type.match("image.*")) {
-//         // Crie um objeto URL temporário para a imagem
-//         const imageUrl = URL.createObjectURL(file);
-
-//         // Aqui você pode fazer o que quiser com a imagem,
-//         // como exibi-la em uma prévia ou fazer upload dela para o servidor.
-
-//         console.log(imageUrl);
-//         // Por exemplo, exibindo uma prévia da imagem:
-//         const preview = $("<img>")
-//           .attr("src", imageUrl)
-//           .addClass("img-thumbnail");
-//         $("#foto-preview").append(preview);
-//       } else {
-//         // Se o arquivo não for uma imagem, você pode lidar com isso aqui
-//         console.log("O arquivo selecionado não é uma imagem.");
-//       }
-//     }
-//   }
-// });
-
-// Evento de mudança no campo de input de arquivo
 $("#foto").on("change", function () {
   const files = $(this)[0].files; // Captura os arquivos selecionados pelo usuário
 
@@ -288,32 +288,22 @@ $("#foto").on("change", function () {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
 
-      // Crie um novo FileReader
-      const reader = new FileReader();
-
-      // Defina o evento onload para executar quando a leitura for concluída
-      reader.onload = function (event) {
-        // A variável event.target.result contém o conteúdo do arquivo em base64
-        const base64String = event.target.result;
-        console.log("Base64 da imagem:", base64String);
-
-        // Aqui você pode fazer o que quiser com o base64 da imagem,
-        // como enviá-lo para o servidor ou realizar outras operações.
-      };
-
-      // Ler o conteúdo do arquivo como uma URL de dados (data URL)
-      reader.readAsDataURL(file);
-
       // Verifica se o arquivo é uma imagem
       if (file.type.match("image.*")) {
+        // Crie um objeto URL temporário para a imagem
         const imageUrl = URL.createObjectURL(file);
 
+        // Aqui você pode fazer o que quiser com a imagem,
+        // como exibi-la em uma prévia ou fazer upload dela para o servidor.
+
         console.log(imageUrl);
+        // Por exemplo, exibindo uma prévia da imagem:
         const preview = $("<img>")
           .attr("src", imageUrl)
           .addClass("img-thumbnail");
         $("#foto-preview").append(preview);
       } else {
+        // Se o arquivo não for uma imagem, você pode lidar com isso aqui
         console.log("O arquivo selecionado não é uma imagem.");
       }
     }
@@ -353,43 +343,46 @@ $("#btn-salvar-anuncio").click(function () {
     quartos: parseFloat(quartos),
     banheiros: parseFloat(banheiros),
     contato: contato,
-    fotos: [], // Inicializar um array vazio para as fotos
+    fotos: [],
   };
 
-  // Verificar se uma foto foi selecionada pelo usuário
   if (foto) {
-    // Ler a foto como uma URL de dados (data URL)
+    if (!foto.type.match("image.*")) {
+      console.error("O arquivo selecionado não é uma imagem.");
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = function (e) {
       const fotoDataURL = e.target.result;
-      novoApartamento.fotos.push(fotoDataURL); // Adicionar a foto ao array de fotos do apartamento
-      // Exibir a foto na página ou realizar outras operações necessárias
-      console.log("Foto carregada:", fotoDataURL);
 
-      // Enviar o novo anúncio para a API
-      criarNovoAnuncio(novoApartamento);
+      if (fotoDataURL.startsWith("data:image/")) {
+        novoApartamento.fotos.push(fotoDataURL);
+
+        console.log("Foto carregada:", fotoDataURL);
+        //console.log(novoApartamento);
+        criarNovoAnuncio(novoApartamento);
+      } else {
+        console.error("A imagem não está codificada em base64.");
+        console.log(fotoDataURL);
+      }
     };
-    // Ler a foto como uma URL de dados (data URL)
+
     reader.readAsDataURL(foto);
   } else {
     // Se nenhuma foto foi selecionada, enviar o novo anúncio para a API sem a foto
-    criarNovoAnuncio(novoApartamento);
+    //criarNovoAnuncio(novoApartamento);
   }
 
   console.log("NOVO APARTAMENTO:");
   console.log(novoApartamento);
 
-  // Adicionar o novo apartamento ao array de apartamentos
   apartamentos.push(novoApartamento);
 
-  // Exibir os apartamentos atualizados na página
   exibirApartamentos(apartamentos);
 
-  // Fechar o modal de criação de anúncio
   $("#modalCriarAnuncio").modal("hide");
 });
-
-// Função para criar um novo anúncio
 function criarNovoAnuncio(novoAnuncio) {
   fetch("http://localhost:3000/apartamentos", {
     method: "POST",
@@ -413,5 +406,4 @@ function criarNovoAnuncio(novoAnuncio) {
     });
 }
 
-// Chamada inicial para exibir os apartamentos na página
 exibirApartamentos(apartamentos);
