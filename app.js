@@ -1,43 +1,3 @@
-// const apartamentos = [
-//   {
-//     id: 1,
-//     nome: "Apartamento 1",
-//     preco: 2000,
-//     regiao: "Centro",
-//     tamanho: 100,
-//     endereco: "Rua A, 123",
-//     quartos: 2,
-//     banheiros: 1,
-//     contato: "1234567890",
-//     fotos: ["./fotos/casa.jpg"],
-//   },
-//   {
-//     id: 2,
-//     nome: "Apartamento 2",
-//     preco: 3000,
-//     regiao: "Contagem",
-//     tamanho: 100,
-//     endereco: "Rua B, 567",
-//     quartos: 2,
-//     banheiros: 1,
-//     contato: "1234567890",
-//     fotos: ["./fotos/casa2.jpeg"],
-//   },
-//   {
-//     id: 3,
-//     nome: "Apartamento 3",
-//     preco: 4000,
-//     regiao: "BH",
-//     tamanho: 100,
-//     endereco: "Rua C, 890",
-//     quartos: 2,
-//     banheiros: 1,
-//     contato: "1234567890",
-//     fotos: ["./fotos/casa3.jpg", "./fotos/casa3-1.jpg"],
-//   },
-//   // Adicione mais apartamentos conforme necessário
-// ];
-
 var apartamentos = [];
 
 // Consultar a API de apartamentos
@@ -210,7 +170,6 @@ $("#apartamentos-container").on("click", ".btn-ver-detalhes", function (event) {
 function exibirDetalhes(id) {
   const apartamento = apartamentos.find((ap) => ap.id === id);
   if (apartamento) {
-    // Preencher o modal com os detalhes do apartamento
     $("#modalImovelNome").text(apartamento.nome);
     $("#modalImovelPreco").text(`Preço: R$ ${apartamento.preco}`);
     $("#modalImovelRegiao").text(`Região: ${apartamento.regiao}`);
@@ -219,22 +178,36 @@ function exibirDetalhes(id) {
     $("#modalImovelBanheiros").text(`Banheiros: ${apartamento.banheiros}`);
     $("#modalImovelContato").text(`Contato: ${apartamento.contato}`);
 
-    // // Preencher o carrossel de fotos do imóvel
-    // const carouselInner = $("#carouselImovel .carousel-inner");
-    // carouselInner.empty();
-    // apartamento.fotos.forEach((foto, index) => {
-    //   const item = $("<div></div>").addClass("carousel-item");
-    //   if (index === 0) item.addClass("active"); // Definir o primeiro item como ativo
-    //   $("<img>").addClass("d-block w-100").attr("src", foto).appendTo(item);
-    //   carouselInner.append(item);
-    // });
+    const carouselInner = $("#carouselImovel .carousel-inner");
+    carouselInner.empty();
 
-    // Abrir o modal de detalhes do imóvel
+    // Convertendo apartamento.fotos para um array, se necessário
+    if (typeof apartamento.fotos === "string") {
+      apartamento.fotos = JSON.parse(apartamento.fotos);
+    }
+
+    if (Array.isArray(apartamento.fotos) && apartamento.fotos.length > 0) {
+      apartamento.fotos.forEach((fotoData, index) => {
+        const item = $("<div></div>")
+          .addClass("carousel-item")
+          .appendTo(carouselInner);
+        if (index === 0) item.addClass("active");
+        const fotoSrc = fotoData.startsWith("data:")
+          ? fotoData
+          : `data:image/jpeg;base64,${fotoData}`;
+        $("<img>")
+          .addClass("d-block w-100")
+          .attr("src", fotoSrc)
+          .appendTo(item);
+      });
+    } else {
+      carouselInner.append("<p>Nenhuma foto disponível</p>");
+    }
+
     $("#modalDetalhes").modal("show");
   }
 }
 
-// Evento de clique no botão "Deletar Anúncio"
 $("#modalDetalhes").on("click", ".btn-deletar-anuncio", function (event) {
   const apartamentoId = $(this).data("id");
 
@@ -310,9 +283,7 @@ $("#foto").on("change", function () {
   }
 });
 
-// Evento de clique no botão "Salvar Anúncio"
 $("#btn-salvar-anuncio").click(function () {
-  // Obter os valores do formulário de criação de anúncio
   const nome = $("#nome").val();
   const preco = $("#preco").val();
   const regiao = $("#regiaoCriar").val();
@@ -322,17 +293,13 @@ $("#btn-salvar-anuncio").click(function () {
   const banheiros = $("#banheiros").val();
   const contato = $("#contato").val();
   const fotoInput = $("#foto")[0]; // Obter o elemento input de foto
-  const foto = fotoInput.files[0]; // Obter o arquivo de foto selecionado pelo usuário
+  const fotos = fotoInput.files; // Obter todos os arquivos de foto selecionados pelo usuário
 
-  console.log("REGIAO: " + $("#regiao").val());
-
-  // Validar os valores do formulário
   if (nome === "" || preco === "") {
     alert("Por favor, preencha todos os campos.");
     return;
   }
 
-  // Criar um novo objeto de apartamento com os valores do formulário
   const novoApartamento = {
     id: apartamentos.length + 1,
     nome: nome,
@@ -346,7 +313,9 @@ $("#btn-salvar-anuncio").click(function () {
     fotos: [],
   };
 
-  if (foto) {
+  for (let i = 0; i < fotos.length; i++) {
+    const foto = fotos[i];
+
     if (!foto.type.match("image.*")) {
       console.error("O arquivo selecionado não é uma imagem.");
       return;
@@ -360,8 +329,11 @@ $("#btn-salvar-anuncio").click(function () {
         novoApartamento.fotos.push(fotoDataURL);
 
         console.log("Foto carregada:", fotoDataURL);
-        //console.log(novoApartamento);
-        criarNovoAnuncio(novoApartamento);
+
+        if (novoApartamento.fotos.length === fotos.length) {
+          // Enviar o novo anúncio para a API somente após todas as fotos serem processadas
+          criarNovoAnuncio(novoApartamento);
+        }
       } else {
         console.error("A imagem não está codificada em base64.");
         console.log(fotoDataURL);
@@ -369,9 +341,6 @@ $("#btn-salvar-anuncio").click(function () {
     };
 
     reader.readAsDataURL(foto);
-  } else {
-    // Se nenhuma foto foi selecionada, enviar o novo anúncio para a API sem a foto
-    //criarNovoAnuncio(novoApartamento);
   }
 
   console.log("NOVO APARTAMENTO:");
@@ -383,6 +352,7 @@ $("#btn-salvar-anuncio").click(function () {
 
   $("#modalCriarAnuncio").modal("hide");
 });
+
 function criarNovoAnuncio(novoAnuncio) {
   fetch("http://localhost:3000/apartamentos", {
     method: "POST",
