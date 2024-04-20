@@ -53,6 +53,10 @@ app.get("/apartamentos/:id", (req, res) => {
 
 app.post("/apartamentos", (req, res) => {
   const novoApartamento = req.body;
+
+  // Converter o array de fotos em formato JSON antes de inserir no banco de dados
+  novoApartamento.fotos = JSON.stringify(novoApartamento.fotos);
+
   db.run(
     "INSERT INTO apartamentos (nome, preco, regiao, tamanho, endereco, quartos, banheiros, contato, fotos) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
     [
@@ -73,6 +77,10 @@ app.post("/apartamentos", (req, res) => {
         return;
       }
       novoApartamento.id = this.lastID;
+
+      // Converter a string JSON de volta para um array antes de enviar a resposta
+      novoApartamento.fotos = JSON.parse(novoApartamento.fotos);
+
       res.status(201).json(novoApartamento);
     }
   );
