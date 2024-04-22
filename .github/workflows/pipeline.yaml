@@ -11,6 +11,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Get directory
+      run: ls
       
     - name: Install dependencies
       run: npm install --prefix /home/runner/work/apartamentos/Backend
