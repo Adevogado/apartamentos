@@ -20,5 +20,5 @@ jobs:
       working-directory: ./Backend
 
     - name: Start Application
-      run: node server.js
+      run: node server.js &
       working-directory: ./Backend
