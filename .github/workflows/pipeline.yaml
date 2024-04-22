@@ -12,11 +12,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Get directory
-      run: ls
-      
+    - name: Navigate to backend directory
+      run: cd Backend && ls
+
     - name: Install dependencies
-      run: npm install --prefix /home/runner/work/apartamentos/Backend
+      run: npm install
+      working-directory: ./Backend
 
     - name: Start Application
-      run: node /home/runner/work/apartamentos/Backend/server.js
+      run: node server.js
+      working-directory: ./Backend
