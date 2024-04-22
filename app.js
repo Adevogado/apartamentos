@@ -1,7 +1,7 @@
 var apartamentos = [];
 
 // Consultar a API de apartamentos
-fetch("http://localhost:3000/apartamentos")
+fetch("https://9978ca43-3279-4312-a2c5-1fda59e3ff3b-00-2fdbb7cudds1a.worf.replit.dev/apartamentos")
   .then((response) => {
     if (!response.ok) {
       throw new Error("Erro ao buscar os apartamentos.");
@@ -218,7 +218,7 @@ $("#modalDetalhes").on("click", ".btn-deletar-anuncio", function (event) {
 // Função para deletar o anúncio
 function deletarAnuncio(apartamentoId) {
   // Fazer a requisição DELETE para a API
-  fetch(`http://localhost:3000/apartamentos/${apartamentoId}`, {
+  fetch(`https://9978ca43-3279-4312-a2c5-1fda59e3ff3b-00-2fdbb7cudds1a.worf.replit.dev/apartamentos/${apartamentoId}`, {
     method: "DELETE",
   })
     .then((response) => {
@@ -354,7 +354,7 @@ $("#btn-salvar-anuncio").click(function () {
 });
 
 function criarNovoAnuncio(novoAnuncio) {
-  fetch("http://localhost:3000/apartamentos", {
+  fetch("https://9978ca43-3279-4312-a2c5-1fda59e3ff3b-00-2fdbb7cudds1a.worf.replit.dev/apartamentos", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
