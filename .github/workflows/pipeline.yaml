@@ -16,7 +16,7 @@ jobs:
       run: cd Backend
 
     - name: Install dependencies
-      run: npm install
+      run: npm install --prefix ../Backend
 
     - name: Start Application
-      run: node server.js
+      run: node server.js --prefix ../Backend
