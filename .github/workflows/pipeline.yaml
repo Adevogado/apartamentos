@@ -1,21 +1,22 @@
-name: Debug Pipeline
+name: Node.js CI/CD
 
 on:
   push:
     branches:
-      - main
+      - main  # ajuste conforme sua branch principal
 
 jobs:
-  debug:
+  build:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
-
+      
     - name: Navigate to backend directory
       run: cd Backend
 
-    - name: Print current directory after cd
-      run: |
-        pwd
-        ls -al
+    - name: Install dependencies
+      run: npm install
+
+    - name: Start Application
+      run: node server.js
