@@ -11,17 +11,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      
-    - name: Print current directory
-      run: |
-        pwd
-        ls -al
-
-    - name: Print environment variables
-      run: env
 
     - name: Navigate to backend directory
-      run: cd backend
+      run: cd Backend
 
     - name: Print current directory after cd
       run: |
