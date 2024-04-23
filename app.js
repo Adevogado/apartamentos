@@ -45,10 +45,10 @@ function exibirApartamentos(apartamentos) {
     const imgSrc =
       Array.isArray(apartamento.fotos) && apartamento.fotos.length > 0
         ? apartamento.fotos[0]
-        : "placeholder.jpg"; // Se não houver fotos, você pode usar uma imagem de placeholder
+        : true; // Se não houver fotos, você pode usar uma imagem de placeholder
     card.html(`
           <h3 class="card-title">${apartamento.nome}</h3>
-          <img src="${imgSrc}" class="card-img-top" alt="Foto do Apartamento"> <!-- Adicione a tag img aqui -->
+          <img src=${imgSrc} class="card-img-top" alt="Foto do Apartamento">
           <p class="card-text">Preço: R$ ${apartamento.preco}</p>
           <p class="card-text">Região: ${apartamento.regiao}</p>
           <button class="btn btn-primary btn-ver-detalhes" data-id="${apartamento.id}">Ver Detalhes</button>
