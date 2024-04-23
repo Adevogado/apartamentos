@@ -45,6 +45,8 @@ function filtrarApartamentosPorNome(nome) {
 
 // Evento de clique no botão "Filtrar"
 $("#btn-filtrar").click(function () {
+  $(".alert.alert-danger:contains('Preencha todos os campos')").remove();
+
   // Obter valores do modal de filtro
   // Verificar se os filtros estão ativos e mostrar/ocultar o botão "Limpar Filtros"
   const valorMinimo = $("#valorMinimo").val();
