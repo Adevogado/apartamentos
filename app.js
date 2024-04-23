@@ -20,14 +20,35 @@ fetch(
     console.error("Erro:", error);
   });
 
+// function exibirApartamentos(apartamentos) {
+//   const container = $("#apartamentos-container");
+//   container.empty();
+//   apartamentos.forEach((apartamento) => {
+//     const card = $("<div></div>").addClass("card mt-3 p-3 bg-light");
+//     card.html(`
+//           <h3 class="card-title">${apartamento.nome}</h3>
+//           <p class="card-text">Preço: R$ ${apartamento.preco}</p>
+//           <p class="card-text">Região: ${apartamento.regiao}</p>
+//           <button class="btn btn-primary btn-ver-detalhes" data-id="${apartamento.id}">Ver Detalhes</button>
+//       `);
+
+//     container.append(card);
+//   });
+// }
+
 function exibirApartamentos(apartamentos) {
   const container = $("#apartamentos-container");
   container.empty();
 
   apartamentos.forEach((apartamento) => {
     const card = $("<div></div>").addClass("card mt-3 p-3 bg-light");
+    const imgSrc =
+      Array.isArray(apartamento.fotos) && apartamento.fotos.length > 0
+        ? apartamento.fotos[0]
+        : "placeholder.jpg"; // Se não houver fotos, você pode usar uma imagem de placeholder
     card.html(`
           <h3 class="card-title">${apartamento.nome}</h3>
+          <img src="${imgSrc}" class="card-img-top" alt="Foto do Apartamento"> <!-- Adicione a tag img aqui -->
           <p class="card-text">Preço: R$ ${apartamento.preco}</p>
           <p class="card-text">Região: ${apartamento.regiao}</p>
           <button class="btn btn-primary btn-ver-detalhes" data-id="${apartamento.id}">Ver Detalhes</button>
