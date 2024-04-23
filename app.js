@@ -152,6 +152,8 @@ $("#modalDetalhes").on("click", ".btn-cancelar-alteracoes", function (event) {
     "#modalImovelPreco, #modalImovelRegiao, #modalImovelEndereco, #modalImovelTamanho, #modalImovelQuartos, #modalImovelBanheiros, #modalImovelContato"
   ).attr("readonly", "readonly");
 
+  $("#modalImovelNome").attr("contenteditable", false);
+
   // Remover botão de confirmar alterações
   $(".btn-confirmar-alteracoes").remove();
 
@@ -191,6 +193,8 @@ $("#modalDetalhes").on("click", ".btn-confirmar-alteracoes", function (event) {
   $(
     "#modalImovelPreco, #modalImovelRegiao, #modalImovelEndereco, #modalImovelTamanho, #modalImovelQuartos, #modalImovelBanheiros, #modalImovelContato"
   ).prop("disabled", true);
+
+  $("#modalImovelNome").attr("contenteditable", false);
 
   // Ocultar os botões de confirmar e cancelar alterações
   $(".btn-confirmar-alteracoes, .btn-cancelar-alteracoes").hide();
