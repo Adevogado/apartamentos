@@ -20,32 +20,13 @@ fetch(
     console.error("Erro:", error);
   });
 
-// function exibirApartamentos(apartamentos) {
-//   const container = $("#apartamentos-container");
-//   container.empty();
-//   apartamentos.forEach((apartamento) => {
-//     const card = $("<div></div>").addClass("card mt-3 p-3 bg-light");
-//     card.html(`
-//           <h3 class="card-title">${apartamento.nome}</h3>
-//           <p class="card-text">Preço: R$ ${apartamento.preco}</p>
-//           <p class="card-text">Região: ${apartamento.regiao}</p>
-//           <button class="btn btn-primary btn-ver-detalhes" data-id="${apartamento.id}">Ver Detalhes</button>
-//       `);
-
-//     container.append(card);
-//   });
-// }
-
 function exibirApartamentos(apartamentos) {
   const container = $("#apartamentos-container");
   container.empty();
-
   apartamentos.forEach((apartamento) => {
     const card = $("<div></div>").addClass("card mt-3 p-3 bg-light");
-    var foto = apartamento.fotos;
     card.html(`
           <h3 class="card-title">${apartamento.nome}</h3>
-          <img src=${foto} class="card-img-top" alt="Foto do Apartamento">
           <p class="card-text">Preço: R$ ${apartamento.preco}</p>
           <p class="card-text">Região: ${apartamento.regiao}</p>
           <button class="btn btn-primary btn-ver-detalhes" data-id="${apartamento.id}">Ver Detalhes</button>
