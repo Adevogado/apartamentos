@@ -189,7 +189,7 @@ $("#modalDetalhes").on("click", ".btn-confirmar-alteracoes", function (event) {
 
   // Desativar todos os campos
   $(
-    ", #modalImovelPreco, #modalImovelRegiao, #modalImovelEndereco, #modalImovelTamanho, #modalImovelQuartos, #modalImovelBanheiros, #modalImovelContato"
+    "#modalImovelPreco, #modalImovelRegiao, #modalImovelEndereco, #modalImovelTamanho, #modalImovelQuartos, #modalImovelBanheiros, #modalImovelContato"
   ).prop("disabled", true);
 
   // Ocultar os botões de confirmar e cancelar alterações
