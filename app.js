@@ -42,10 +42,7 @@ function exibirApartamentos(apartamentos) {
 
   apartamentos.forEach((apartamento) => {
     const card = $("<div></div>").addClass("card mt-3 p-3 bg-light");
-    const imgSrc =
-      Array.isArray(apartamento.fotos) && apartamento.fotos.length > 0
-        ? apartamento.fotos[0]
-        : true; // Se não houver fotos, você pode usar uma imagem de placeholder
+    const imgSrc = apartamento.fotos[0] || true; // Se não houver fotos, você pode usar uma imagem de placeholder
     card.html(`
           <h3 class="card-title">${apartamento.nome}</h3>
           <img src=${imgSrc} class="card-img-top" alt="Foto do Apartamento">
