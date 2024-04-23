@@ -1,5 +1,6 @@
 var apartamentos = [];
 
+console.log("teste");
 // Consultar a API de apartamentos
 fetch(
   "https://d9bfee03-5f66-43c5-98c6-432aba8665e8-00-1tty19cavysgh.worf.replit.dev/apartamentos"
