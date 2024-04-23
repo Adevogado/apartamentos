@@ -302,7 +302,7 @@ $("#apartamentos-container").on("click", ".btn-ver-detalhes", function (event) {
 
 $("#modalDetalhes").on("click", ".btn-deletar-anuncio", function (event) {
   const apartamentoId = $(this).data("id");
-
+  location.reload();
   // Chama a função para deletar o anúncio
   deletarAnuncio(apartamentoId);
 });
