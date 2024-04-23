@@ -332,7 +332,9 @@ function deletarAnuncio(apartamentoId) {
       console.error("Erro ao deletar o anúncio:", error);
     });
 
-  location.reload();
+  setTimeout(() => {
+    location.reload();
+  }, 2000);
 }
 
 // Evento de clique no botão "Criar Anúncio"
