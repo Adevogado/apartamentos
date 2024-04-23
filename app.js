@@ -166,7 +166,7 @@ $("#modalDetalhes").on("click", ".btn-confirmar-alteracoes", function (event) {
   const apartamentoId = $(this).data("id");
 
   // Coletar os novos valores dos campos editados
-  const nome = $("#modalImovelNome").val();
+  const nome = $("#modalImovelNome").text();
   const preco = $("#modalImovelPreco").val();
   const regiao = $("#modalImovelRegiao").val();
   const endereco = $("#modalImovelEndereco").val();
