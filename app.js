@@ -126,6 +126,8 @@ $("#modalDetalhes").on("click", ".btn-editar-anuncio", function (event) {
       "#modalImovelPreco, #modalImovelRegiao, #modalImovelEndereco, #modalImovelTamanho, #modalImovelQuartos, #modalImovelBanheiros, #modalImovelContato"
     ).removeAttr("readonly");
 
+    $("#modalImovelNome").attr("contenteditable", true);
+
     // Adicionar botão de confirmar alterações
     $(".btn-confirmar-alteracoes").remove();
     $(".btn-editar-anuncio").after(
