@@ -2,7 +2,7 @@ var apartamentos = [];
 
 // Consultar a API de apartamentos
 fetch(
-  "https://819f0fad-bc6a-45d5-a429-263ef5e5e61a-00-rnexl5zeslo2.worf.replit.dev/apartamentos"
+  "https://d9bfee03-5f66-43c5-98c6-432aba8665e8-00-1tty19cavysgh.worf.replit.dev/apartamentos"
 )
   .then((response) => {
     if (!response.ok) {
@@ -201,7 +201,7 @@ $("#modalDetalhes").on("click", ".btn-confirmar-alteracoes", function (event) {
 
   // Enviar uma solicitação PUT para a API com os dados atualizados usando Fetch
   fetch(
-    `https://819f0fad-bc6a-45d5-a429-263ef5e5e61a-00-rnexl5zeslo2.worf.replit.dev/apartamentos/${apartamentoId}`,
+    `https://d9bfee03-5f66-43c5-98c6-432aba8665e8-00-1tty19cavysgh.worf.replit.dev/apartamentos/${apartamentoId}`,
     {
       method: "PUT",
       headers: {
@@ -306,7 +306,7 @@ function deletarAnuncio(apartamentoId) {
   console.log(apartamentoId);
   // Fazer a requisição DELETE para a API
   fetch(
-    `https://819f0fad-bc6a-45d5-a429-263ef5e5e61a-00-rnexl5zeslo2.worf.replit.dev/apartamentos/${apartamentoId}`,
+    `https://d9bfee03-5f66-43c5-98c6-432aba8665e8-00-1tty19cavysgh.worf.replit.dev/apartamentos/${apartamentoId}`,
     {
       method: "DELETE",
     }
@@ -506,7 +506,7 @@ $("#btn-salvar-anuncio").click(function () {
 
 function criarNovoAnuncio(novoAnuncio) {
   fetch(
-    "https://819f0fad-bc6a-45d5-a429-263ef5e5e61a-00-rnexl5zeslo2.worf.replit.dev/apartamentos",
+    "https://d9bfee03-5f66-43c5-98c6-432aba8665e8-00-1tty19cavysgh.worf.replit.dev/apartamentos",
     {
       method: "POST",
       headers: {
