@@ -8,6 +8,55 @@
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* Adicionando margem entre os campos */
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      /* Centralizando a label para os campos de número */
+      label {
+        text-align: center;
+      }
+
+      /* Ajustando o tamanho dos campos de entrada */
+      .form-control {
+        width: 100%;
+      }
+
+      /* Estilizando o campo de upload de arquivos */
+      input[type="file"] {
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        padding: 8px;
+      }
+
+      .background-verde {
+        background-color: green;
+        color: white; /* Define a cor do texto como branco para garantir a legibilidade */
+      }
+
+      /* Estilizando a prévia de fotos */
+      #foto-preview {
+        margin-top: 20px;
+      }
+
+      .campo-invalido {
+        border-color: red !important;
+        border-width: 2px !important;
+      }
+
+      /* Ajustando o layout para telas menores */
+      @media (max-width: 768px) {
+        .form-group {
+          margin-bottom: 15px;
+        }
+      }
+    </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Adicione links para seus arquivos CSS e JavaScript -->
     <script src=""></script>
@@ -160,67 +209,113 @@
           </div>
           <div class="modal-body">
             <form id="form-criar-anuncio">
-              <!-- Adicione os campos do formulário para criar um novo anúncio -->
-              <div class="form-group">
-                <label for="nome">Nome</label>
-                <input type="text" class="form-control" id="nome" required />
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="nome">
+                    <i class="bi bi-person-fill"></i> Nome
+                  </label>
+                  <input type="text" class="form-control" id="nome" required />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="preco">
+                    <i class="bi bi-cash"></i> Preço (R$)
+                  </label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text background-verde">R$</span>
+                    </div>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="preco"
+                      min="0"
+                      step="1"
+                      required
+                    />
+                  </div>
+                </div>
               </div>
-              <div class="form-group">
-                <label for="preco">Preço</label>
-                <input type="number" class="form-control" id="preco" required />
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="regiaoCriar">
+                    <i class="bi bi-geo-alt"></i> Região
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="regiaoCriar"
+                    required
+                  />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="endereco">
+                    <i class="bi bi-geo-alt"></i> Endereço
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="endereco"
+                    required
+                  />
+                </div>
               </div>
-              <div class="form-group">
-                <label for="regiaoCriar">Região</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="regiaoCriar"
-                  required
-                />
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="tamanho">
+                    <i class="bi bi-bounding-box"></i> Tamanho
+                  </label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="tamanho"
+                    min="0"
+                    step="1"
+                    required
+                  />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="quartos">
+                    <i class="bi bi-door-closed"></i> Nº de Quartos
+                  </label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="quartos"
+                    min="0"
+                    step="1"
+                    required
+                  />
+                </div>
               </div>
-              <div class="form-group">
-                <label for="endereco">Endereço</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="endereco"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="tamanho">Tamanho</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="tamanho"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="quartos">Quartos</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="quartos"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="banheiros">Banheiros</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="banheiros"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="contato">Contato</label>
-                <input type="text" class="form-control" id="contato" required />
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="banheiros">
+                    <i class="bi bi-bath"></i> Nº de Banheiros
+                  </label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="banheiros"
+                    min="0"
+                    step="1"
+                    required
+                  />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="contato">
+                    <i class="bi bi-telephone-fill"></i> Contato
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="contato"
+                    required
+                  />
+                </div>
               </div>
               <!-- Adicionar campo para upload de fotos -->
               <div class="form-group">
-                <label for="foto">Foto</label>
+                <label for="foto"> <i class="bi bi-camera"></i> Foto </label>
                 <input
                   type="file"
                   class="form-control-file"
@@ -239,6 +334,7 @@
               <!-- Adicione os demais campos do formulário conforme necessário -->
             </form>
           </div>
+
           <div class="modal-footer">
             <button
               type="button"
@@ -319,12 +415,97 @@
               </a>
             </div>
             <h5 id="modalImovelNome"></h5>
-            <p id="modalImovelPreco"></p>
-            <p id="modalImovelRegiao"></p>
-            <p id="modalImovelEndereco"></p>
-            <p id="modalImovelQuartos"></p>
-            <p id="modalImovelBanheiros"></p>
-            <p id="modalImovelContato"></p>
+            <div class="form-group row">
+              <label for="modalImovelPreco" class="col-sm-3 col-form-label"
+                >Preço:</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="modalImovelPreco"
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modalImovelRegiao" class="col-sm-3 col-form-label"
+                >Região:</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="modalImovelRegiao"
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modalImovelEndereco" class="col-sm-3 col-form-label"
+                >Endereço:</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="modalImovelEndereco"
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modalImovelTamanho" class="col-sm-3 col-form-label"
+                >Tamanho:</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="modalImovelTamanho"
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modalImovelQuartos" class="col-sm-3 col-form-label"
+                >Quartos:</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="modalImovelQuartos"
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modalImovelBanheiros" class="col-sm-3 col-form-label"
+                >Banheiros:</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="modalImovelBanheiros"
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modalImovelContato" class="col-sm-3 col-form-label"
+                >Contato:</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="modalImovelContato"
+                  readonly
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -333,7 +514,8 @@
     <div id="apartamentos-container" class="container mt-4"></div>
 
     <script src="app.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   </body>

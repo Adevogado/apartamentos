@@ -1,7 +1,9 @@
 var apartamentos = [];
 
 // Consultar a API de apartamentos
-fetch("https://9978ca43-3279-4312-a2c5-1fda59e3ff3b-00-2fdbb7cudds1a.worf.replit.dev/apartamentos")
+fetch(
+  "https://819f0fad-bc6a-45d5-a429-263ef5e5e61a-00-rnexl5zeslo2.worf.replit.dev/apartamentos"
+)
   .then((response) => {
     if (!response.ok) {
       throw new Error("Erro ao buscar os apartamentos.");
@@ -23,7 +25,6 @@ function exibirApartamentos(apartamentos) {
 
   apartamentos.forEach((apartamento) => {
     const card = $("<div></div>").addClass("card mt-3 p-3 bg-light");
-    console.log(JSON.stringify(apartamento));
     card.html(`
           <h3 class="card-title">${apartamento.nome}</h3>
           <p class="card-text">Preço: R$ ${apartamento.preco}</p>
@@ -111,6 +112,122 @@ $("#input-busca").on("input keydown", function (event) {
   }
 });
 
+$("#modalDetalhes").on("click", ".btn-editar-anuncio", function (event) {
+  $(".btn-editar-anuncio").hide();
+  const apartamentoId = $(this).data("id");
+  const apartamento = apartamentos.find(
+    (ap) => ap.id === parseInt(apartamentoId)
+  );
+
+  if (apartamento) {
+    // Ativar campos para edição
+    $(
+      "#modalImovelPreco, #modalImovelRegiao, #modalImovelEndereco, #modalImovelTamanho, #modalImovelQuartos, #modalImovelBanheiros, #modalImovelContato"
+    ).removeAttr("readonly");
+
+    // Adicionar botão de confirmar alterações
+    $(".btn-confirmar-alteracoes").remove();
+    $(".btn-editar-anuncio").after(
+      `<button class="btn btn-success btn-confirmar-alteracoes" data-id="${apartamento.id}">Confirmar Alterações</button>`
+    );
+
+    // Adicionar botão de cancelar alterações
+    $(".btn-cancelar-alteracoes").remove();
+    $(".btn-editar-anuncio").after(
+      `<button class="btn btn-secondary btn-cancelar-alteracoes" data-id="${apartamento.id}">Cancelar</button>`
+    );
+
+    // Desativar botão de editar
+    $(this).attr("disabled", "disabled");
+  } else {
+    console.log("Apartamento não encontrado");
+  }
+});
+
+// Evento de clique no botão Cancelar
+$("#modalDetalhes").on("click", ".btn-cancelar-alteracoes", function (event) {
+  $(".btn-editar-anuncio").show();
+  // Desativar campos
+  $(
+    "#modalImovelPreco, #modalImovelRegiao, #modalImovelEndereco, #modalImovelTamanho, #modalImovelQuartos, #modalImovelBanheiros, #modalImovelContato"
+  ).attr("readonly", "readonly");
+
+  // Remover botão de confirmar alterações
+  $(".btn-confirmar-alteracoes").remove();
+
+  // Remover botão de cancelar alterações
+  $(".btn-cancelar-alteracoes").remove();
+
+  // Ativar botão de editar
+  $(".btn-editar-anuncio").removeAttr("disabled");
+});
+
+$("#modalDetalhes").on("click", ".btn-confirmar-alteracoes", function (event) {
+  const apartamentoId = $(this).data("id");
+
+  // Coletar os novos valores dos campos editados
+  const nome = $("#modalImovelNome").val();
+  const preco = $("#modalImovelPreco").val();
+  const regiao = $("#modalImovelRegiao").val();
+  const endereco = $("#modalImovelEndereco").val();
+  const tamanho = $("#modalImovelTamanho").val();
+  const quartos = $("#modalImovelQuartos").val();
+  const banheiros = $("#modalImovelBanheiros").val();
+  const contato = $("#modalImovelContato").val();
+
+  // Montar o objeto com os dados atualizados
+  const dadosAtualizados = {
+    nome: nome,
+    preco: preco,
+    regiao: regiao,
+    endereco: endereco,
+    tamanho: tamanho,
+    quartos: quartos,
+    banheiros: banheiros,
+    contato: contato,
+  };
+
+  // Desativar todos os campos
+  $(
+    ", #modalImovelPreco, #modalImovelRegiao, #modalImovelEndereco, #modalImovelTamanho, #modalImovelQuartos, #modalImovelBanheiros, #modalImovelContato"
+  ).prop("disabled", true);
+
+  // Ocultar os botões de confirmar e cancelar alterações
+  $(".btn-confirmar-alteracoes, .btn-cancelar-alteracoes").hide();
+
+  // Exibir o botão de editar anúncio
+  $(".btn-editar-anuncio").show();
+  $(".btn-editar-anuncio").removeAttr("disabled");
+
+  // Enviar uma solicitação PUT para a API com os dados atualizados usando Fetch
+  fetch(
+    `https://819f0fad-bc6a-45d5-a429-263ef5e5e61a-00-rnexl5zeslo2.worf.replit.dev/apartamentos/${apartamentoId}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dadosAtualizados),
+    }
+  )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro ao confirmar alterações");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Alterações confirmadas:", data);
+      // Recarregar a página ou atualizar os dados do apartamento na interface, se necessário
+      // ...
+    })
+    .catch((error) => {
+      console.error("Erro ao confirmar alterações:", error);
+      // Exibir uma mensagem de erro ao usuário, se necessário
+      // ...
+    });
+});
+
 // Evento de clique nos botões de detalhes
 $("#apartamentos-container").on("click", ".btn-ver-detalhes", function (event) {
   const apartamentoId = $(this).data("id");
@@ -120,20 +237,29 @@ $("#apartamentos-container").on("click", ".btn-ver-detalhes", function (event) {
 
   if (apartamento) {
     $("#modalImovelNome").text(apartamento.nome);
-    $("#modalImovelPreco").text(`Preço: R$ ${apartamento.preco}`);
-    $("#modalImovelRegiao").text(`Região: ${apartamento.regiao}`);
-    $("#modalImovelEndereco").text(`Endereço: ${apartamento.endereco}`);
-    $("#modalImovelQuartos").text(`Quartos: ${apartamento.quartos}`);
-    $("#modalImovelBanheiros").text(`Banheiros: ${apartamento.banheiros}`);
-    $("#modalImovelContato").text(`Contato: ${apartamento.contato}`);
+    $("#modalImovelPreco").val(apartamento.preco);
+    $("#modalImovelRegiao").val(apartamento.regiao);
+    $("#modalImovelEndereco").val(apartamento.endereco);
+    $("#modalImovelTamanho").val(apartamento.tamanho);
+    $("#modalImovelQuartos").val(apartamento.quartos);
+    $("#modalImovelBanheiros").val(apartamento.banheiros);
+    $("#modalImovelContato").val(apartamento.contato);
 
-    // Remove qualquer botão "Deletar Anúncio" existente
+    // Remove botões já existentes
     $(".btn-deletar-anuncio").remove();
+    $(".btn-editar-anuncio").remove();
 
-    // Adiciona o botão de Deletar Anúncio
-    $("#modalImovelContato").after(
-      `<button class="btn btn-danger btn-deletar-anuncio" data-id="${apartamento.id}">Deletar Anúncio</button>`
-    );
+    // Adiciona o botão de Deletar Anúncio após o campo de contato
+    $("#modalImovelContato")
+      .closest(".form-group")
+      .after(
+        `<div class="form-group row">
+       <div class="col-sm-9 offset-sm-3">
+         <button class="btn btn-danger btn-deletar-anuncio" data-id="${apartamento.id}">Deletar Anúncio</button>
+         <button class="btn btn-warning btn-editar-anuncio" data-id="${apartamento.id}">Editar Anúncio</button>
+       </div>
+     </div>`
+      );
 
     const carouselInner = $("#carouselImovel .carousel-inner");
     carouselInner.empty();
@@ -167,47 +293,6 @@ $("#apartamentos-container").on("click", ".btn-ver-detalhes", function (event) {
   }
 });
 
-function exibirDetalhes(id) {
-  const apartamento = apartamentos.find((ap) => ap.id === id);
-  if (apartamento) {
-    $("#modalImovelNome").text(apartamento.nome);
-    $("#modalImovelPreco").text(`Preço: R$ ${apartamento.preco}`);
-    $("#modalImovelRegiao").text(`Região: ${apartamento.regiao}`);
-    $("#modalImovelEndereco").text(`Endereço: ${apartamento.endereco}`);
-    $("#modalImovelQuartos").text(`Quartos: ${apartamento.quartos}`);
-    $("#modalImovelBanheiros").text(`Banheiros: ${apartamento.banheiros}`);
-    $("#modalImovelContato").text(`Contato: ${apartamento.contato}`);
-
-    const carouselInner = $("#carouselImovel .carousel-inner");
-    carouselInner.empty();
-
-    // Convertendo apartamento.fotos para um array, se necessário
-    if (typeof apartamento.fotos === "string") {
-      apartamento.fotos = JSON.parse(apartamento.fotos);
-    }
-
-    if (Array.isArray(apartamento.fotos) && apartamento.fotos.length > 0) {
-      apartamento.fotos.forEach((fotoData, index) => {
-        const item = $("<div></div>")
-          .addClass("carousel-item")
-          .appendTo(carouselInner);
-        if (index === 0) item.addClass("active");
-        const fotoSrc = fotoData.startsWith("data:")
-          ? fotoData
-          : `data:image/jpeg;base64,${fotoData}`;
-        $("<img>")
-          .addClass("d-block w-100")
-          .attr("src", fotoSrc)
-          .appendTo(item);
-      });
-    } else {
-      carouselInner.append("<p>Nenhuma foto disponível</p>");
-    }
-
-    $("#modalDetalhes").modal("show");
-  }
-}
-
 $("#modalDetalhes").on("click", ".btn-deletar-anuncio", function (event) {
   const apartamentoId = $(this).data("id");
 
@@ -217,10 +302,15 @@ $("#modalDetalhes").on("click", ".btn-deletar-anuncio", function (event) {
 
 // Função para deletar o anúncio
 function deletarAnuncio(apartamentoId) {
+  console.log("apartamentoId");
+  console.log(apartamentoId);
   // Fazer a requisição DELETE para a API
-  fetch(`https://9978ca43-3279-4312-a2c5-1fda59e3ff3b-00-2fdbb7cudds1a.worf.replit.dev/apartamentos/${apartamentoId}`, {
-    method: "DELETE",
-  })
+  fetch(
+    `https://819f0fad-bc6a-45d5-a429-263ef5e5e61a-00-rnexl5zeslo2.worf.replit.dev/apartamentos/${apartamentoId}`,
+    {
+      method: "DELETE",
+    }
+  )
     .then((response) => {
       if (!response.ok) {
         throw new Error("Erro ao deletar o anúncio.");
@@ -229,9 +319,7 @@ function deletarAnuncio(apartamentoId) {
     })
     .then((data) => {
       console.log("Anúncio deletado com sucesso:", data);
-      // Aqui você pode fazer algo após deletar o anúncio, se necessário
-      // Por exemplo, atualizar a lista de apartamentos exibidos na página
-      // ou fechar o modal de detalhes do imóvel
+      $("#apartamento-" + apartamentoId).remove();
       $("#modalDetalhes").modal("hide");
     })
     .catch((error) => {
@@ -283,33 +371,96 @@ $("#foto").on("change", function () {
   }
 });
 
+$("#preco").on("input", function () {
+  // Obter o valor atual do campo de preço
+  let preco = $(this).val();
+
+  // Verificar se o valor é um número inteiro positivo
+  if (
+    preco !== "" &&
+    (isNaN(preco) ||
+      parseInt(preco) !== parseFloat(preco) ||
+      parseInt(preco) < 0)
+  ) {
+    // Se o valor não for um número inteiro positivo, definir o valor como vazio
+    $(this).val("");
+  }
+});
+
+$(".form-control").on("input", function () {
+  if ($(this).val() !== "") {
+    $(this).removeClass("campo-invalido");
+  }
+});
+
 $("#btn-salvar-anuncio").click(function () {
-  const nome = $("#nome").val();
-  const preco = $("#preco").val();
-  const regiao = $("#regiaoCriar").val();
-  const tamanho = $("#tamanho").val();
-  const endereco = $("#endereco").val();
-  const quartos = $("#quartos").val();
-  const banheiros = $("#banheiros").val();
-  const contato = $("#contato").val();
+  const nome = $("#nome");
+  const preco = $("#preco");
+  const regiao = $("#regiaoCriar");
+  const tamanho = $("#tamanho");
+  const endereco = $("#endereco");
+  const quartos = $("#quartos");
+  const banheiros = $("#banheiros");
+  const contato = $("#contato");
   const fotoInput = $("#foto")[0]; // Obter o elemento input de foto
   const fotos = fotoInput.files; // Obter todos os arquivos de foto selecionados pelo usuário
 
-  if (nome === "" || preco === "") {
-    alert("Por favor, preencha todos os campos.");
+  const campos = [
+    { campo: $("#nome"), mensagem: "Nome" },
+    { campo: $("#preco"), mensagem: "Preço" },
+    { campo: $("#regiaoCriar"), mensagem: "Região" },
+    { campo: $("#tamanho"), mensagem: "Tamanho" },
+    { campo: $("#endereco"), mensagem: "Endereço" },
+    { campo: $("#quartos"), mensagem: "Quartos" },
+    { campo: $("#banheiros"), mensagem: "Banheiros" },
+    { campo: $("#contato"), mensagem: "Contato" },
+  ];
+
+  // Remover classes de erro de todos os campos
+  $(".form-control").removeClass("campo-invalido");
+
+  // Remover classes de erro de todos os campos
+  $(".form-control").removeClass("campo-invalido");
+
+  let camposVazios = false;
+  let camposNaoPreenchidos = [];
+
+  // Verificar se algum campo está vazio e marcar campos vazios
+  campos.forEach(({ campo, mensagem }) => {
+    if (campo.val() === "") {
+      campo.addClass("campo-invalido");
+      camposVazios = true;
+      camposNaoPreenchidos.push(mensagem);
+    }
+  });
+
+  let toastElement;
+  if (camposVazios) {
+    const camposNaoPreenchidosStr = camposNaoPreenchidos.join(", ");
+    const toast = `
+    <div class="alert alert-danger" role="alert">
+      Preencha todos os campos
+    </div>
+  `;
+    $(toast).appendTo(".modal-body");
+    $(".toast").toast("show");
     return;
+  } else {
+    if (toastElement) {
+      toastElement.remove();
+    }
   }
 
   const novoApartamento = {
     id: apartamentos.length + 1,
-    nome: nome,
-    preco: parseFloat(preco),
-    regiao: regiao,
-    tamanho: parseFloat(tamanho),
-    endereco: endereco,
-    quartos: parseFloat(quartos),
-    banheiros: parseFloat(banheiros),
-    contato: contato,
+    nome: nome.val(),
+    preco: parseFloat(preco.val()),
+    regiao: regiao.val(),
+    tamanho: parseFloat(tamanho.val()),
+    endereco: endereco.val(),
+    quartos: parseFloat(quartos.val()),
+    banheiros: parseFloat(banheiros.val()),
+    contato: contato.val(),
     fotos: [],
   };
 
@@ -354,13 +505,16 @@ $("#btn-salvar-anuncio").click(function () {
 });
 
 function criarNovoAnuncio(novoAnuncio) {
-  fetch("https://9978ca43-3279-4312-a2c5-1fda59e3ff3b-00-2fdbb7cudds1a.worf.replit.dev/apartamentos", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(novoAnuncio),
-  })
+  fetch(
+    "https://819f0fad-bc6a-45d5-a429-263ef5e5e61a-00-rnexl5zeslo2.worf.replit.dev/apartamentos",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(novoAnuncio),
+    }
+  )
     .then((response) => {
       if (!response.ok) {
         throw new Error("Erro ao criar novo anúncio.");
