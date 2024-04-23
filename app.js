@@ -233,6 +233,10 @@ $("#modalDetalhes").on("click", ".btn-confirmar-alteracoes", function (event) {
       // Exibir uma mensagem de erro ao usuário, se necessário
       // ...
     });
+
+  setTimeout(() => {
+    location.reload();
+  }, 2000);
 });
 
 // Evento de clique nos botões de detalhes
