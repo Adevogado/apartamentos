@@ -274,14 +274,14 @@ $("#apartamentos-container").on("click", ".btn-ver-detalhes", function (event) {
     carouselInner.empty();
 
     if (apartamento.fotos && apartamento.fotos.length > 0) {
-      const item = $("<div></div>")
+      var item = $("<div></div>")
         .addClass("carousel-item")
         .appendTo(carouselInner);
       item.addClass("active");
-      const fotoSrc = apartamento.fotos.startsWith("data:")
-        ? apartamento.fotos
-        : `data:image/jpeg;base64,${apartamento.fotos}`;
-      $("<img>").addClass("d-block w-100").attr("src", fotoSrc).appendTo(item);
+      $("<img>")
+        .addClass("d-block w-100")
+        .attr("src", apartamento.fotos)
+        .appendTo(item);
     } else {
       carouselInner.append("<p>Nenhuma foto disponível</p>");
     }
