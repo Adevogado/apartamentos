@@ -178,6 +178,7 @@ $("#modalDetalhes").on("click", ".btn-confirmar-alteracoes", function (event) {
   const quartos = $("#modalImovelQuartos").val();
   const banheiros = $("#modalImovelBanheiros").val();
   const contato = $("#modalImovelContato").val();
+  const fotos = $(".carousel-item.active img").prop("src");
 
   // Montar o objeto com os dados atualizados
   const dadosAtualizados = {
@@ -189,6 +190,7 @@ $("#modalDetalhes").on("click", ".btn-confirmar-alteracoes", function (event) {
     quartos: quartos,
     banheiros: banheiros,
     contato: contato,
+    fotos: fotos,
   };
 
   // Desativar todos os campos
