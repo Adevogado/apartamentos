@@ -2,9 +2,7 @@ var apartamentos = [];
 
 console.log("teste");
 // Consultar a API de apartamentos
-fetch(
-  "https://d9bfee03-5f66-43c5-98c6-432aba8665e8-00-1tty19cavysgh.worf.replit.dev/apartamentos"
-)
+fetch("https://api-apartamentos.vercel.app/apartamentos")
   .then((response) => {
     if (!response.ok) {
       throw new Error("Erro ao buscar os apartamentos.");
@@ -208,16 +206,13 @@ $("#modalDetalhes").on("click", ".btn-confirmar-alteracoes", function (event) {
   $(".btn-editar-anuncio").removeAttr("disabled");
 
   // Enviar uma solicitação PUT para a API com os dados atualizados usando Fetch
-  fetch(
-    `https://d9bfee03-5f66-43c5-98c6-432aba8665e8-00-1tty19cavysgh.worf.replit.dev/apartamentos/${apartamentoId}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(dadosAtualizados),
-    }
-  )
+  fetch(`https://api-apartamentos.vercel.app/apartamentos/${apartamentoId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(dadosAtualizados),
+  })
     .then((response) => {
       if (!response.ok) {
         throw new Error("Erro ao confirmar alterações");
@@ -316,12 +311,9 @@ function deletarAnuncio(apartamentoId) {
   console.log("apartamentoId");
   console.log(apartamentoId);
   // Fazer a requisição DELETE para a API
-  fetch(
-    `https://d9bfee03-5f66-43c5-98c6-432aba8665e8-00-1tty19cavysgh.worf.replit.dev/apartamentos/${apartamentoId}`,
-    {
-      method: "DELETE",
-    }
-  )
+  fetch(`https://api-apartamentos.vercel.app/apartamentos/${apartamentoId}`, {
+    method: "DELETE",
+  })
     .then((response) => {
       if (!response.ok) {
         throw new Error("Erro ao deletar o anúncio.");
@@ -520,16 +512,13 @@ $("#btn-salvar-anuncio").click(function () {
 });
 
 function criarNovoAnuncio(novoAnuncio) {
-  fetch(
-    "https://d9bfee03-5f66-43c5-98c6-432aba8665e8-00-1tty19cavysgh.worf.replit.dev/apartamentos",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(novoAnuncio),
-    }
-  )
+  fetch("https://api-apartamentos.vercel.app/apartamentos", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(novoAnuncio),
+  })
     .then((response) => {
       if (!response.ok) {
         throw new Error("Erro ao criar novo anúncio.");
