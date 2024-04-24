@@ -237,9 +237,9 @@ $("#modalDetalhes").on("click", ".btn-confirmar-alteracoes", function (event) {
 
 // Evento de clique nos botões de detalhes
 $("#apartamentos-container").on("click", ".btn-ver-detalhes", function (event) {
-  const apartamentoId = $(this).data("id");
+  const apartamentoId = Number($(this).data("id"));
   const apartamento = apartamentos.find(
-    (ap) => ap.id === parseInt(apartamentoId)
+    (ap) => ap.id == parseInt(apartamentoId)
   );
 
   if (apartamento) {
