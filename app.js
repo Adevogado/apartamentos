@@ -273,30 +273,15 @@ $("#apartamentos-container").on("click", ".btn-ver-detalhes", function (event) {
     const carouselInner = $("#carouselImovel .carousel-inner");
     carouselInner.empty();
 
-    // Convertendo apartamento.fotos para um array, se necessário
-    if (typeof apartamento.fotos == "string") {
-      try {
-        apartamento.fotos = JSON.parse(apartamento.fotos);
-      } catch (error) {
-        console.error("Erro ao analisar JSON:", error);
-        apartamento.fotos = []; // Defina como um array vazio se houver um erro de parsing
-      }
-    }
-
-    if (Array.isArray(apartamento.fotos) && apartamento.fotos.length > 0) {
-      apartamento.fotos.forEach((fotoData, index) => {
-        const item = $("<div></div>")
-          .addClass("carousel-item")
-          .appendTo(carouselInner);
-        if (index == 0) item.addClass("active");
-        const fotoSrc = fotoData.startsWith("data:")
-          ? fotoData
-          : `data:image/jpeg;base64,${fotoData}`;
-        $("<img>")
-          .addClass("d-block w-100")
-          .attr("src", fotoSrc)
-          .appendTo(item);
-      });
+    if (apartamento.fotos && apartamento.fotos.length > 0) {
+      const item = $("<div></div>")
+        .addClass("carousel-item")
+        .appendTo(carouselInner);
+      item.addClass("active");
+      const fotoSrc = apartamento.fotos.startsWith("data:")
+        ? apartamento.fotos
+        : `data:image/jpeg;base64,${apartamento.fotos}`;
+      $("<img>").addClass("d-block w-100").attr("src", fotoSrc).appendTo(item);
     } else {
       carouselInner.append("<p>Nenhuma foto disponível</p>");
     }
