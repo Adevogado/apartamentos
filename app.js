@@ -274,8 +274,13 @@ $("#apartamentos-container").on("click", ".btn-ver-detalhes", function (event) {
     carouselInner.empty();
 
     // Convertendo apartamento.fotos para um array, se necessário
-    if (typeof apartamento.fotos === "string") {
-      apartamento.fotos = JSON.parse(apartamento.fotos);
+    if (typeof apartamento.fotos == "string") {
+      try {
+        apartamento.fotos = JSON.parse(apartamento.fotos);
+      } catch (error) {
+        console.error("Erro ao analisar JSON:", error);
+        apartamento.fotos = []; // Defina como um array vazio se houver um erro de parsing
+      }
     }
 
     if (Array.isArray(apartamento.fotos) && apartamento.fotos.length > 0) {
@@ -283,7 +288,7 @@ $("#apartamentos-container").on("click", ".btn-ver-detalhes", function (event) {
         const item = $("<div></div>")
           .addClass("carousel-item")
           .appendTo(carouselInner);
-        if (index === 0) item.addClass("active");
+        if (index == 0) item.addClass("active");
         const fotoSrc = fotoData.startsWith("data:")
           ? fotoData
           : `data:image/jpeg;base64,${fotoData}`;
