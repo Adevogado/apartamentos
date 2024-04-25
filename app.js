@@ -463,29 +463,32 @@ $("#btn-salvar-anuncio").click(function () {
     fotos: "",
   };
 
-  for (let i = 0; i < fotos.length; i++) {
-    const foto = fotos[i];
+  if (fotos.length > 0) {
+    for (let i = 0; i < fotos.length; i++) {
+      const foto = fotos[i];
 
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const fotoDataURL = e.target.result;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const fotoDataURL = e.target.result;
 
-      if (fotoDataURL.startsWith("data:image/")) {
-        novoApartamento.fotos.push(fotoDataURL);
+        if (fotoDataURL.startsWith("data:image/")) {
+          novoApartamento.fotos.push(fotoDataURL);
 
-        if (novoApartamento.fotos.length == fotos.length) {
-          // Enviar o novo anúncio para a API somente após todas as fotos serem processadas
-          criarNovoAnuncio(novoApartamento);
+          if (novoApartamento.fotos.length == fotos.length) {
+            // Enviar o novo anúncio para a API somente após todas as fotos serem processadas
+            criarNovoAnuncio(novoApartamento);
+          }
+        } else {
+          console.error("A imagem não está codificada em base64.");
+          console.log(fotoDataURL);
         }
-      } else {
-        console.error("A imagem não está codificada em base64.");
-        console.log(fotoDataURL);
-        novoApartamento.fotos = "";
-        criarNovoAnuncio(novoApartamento);
-      }
-    };
+      };
 
-    reader.readAsDataURL(foto);
+      reader.readAsDataURL(foto);
+    }
+  } else {
+    novoApartamento.fotos = "";
+    criarNovoAnuncio(novoApartamento);
   }
 
   console.log("NOVO APARTAMENTO:");
