@@ -460,16 +460,11 @@ $("#btn-salvar-anuncio").click(function () {
     quartos: parseFloat(quartos.val()),
     banheiros: parseFloat(banheiros.val()),
     contato: contato.val(),
-    fotos: [],
+    fotos: "",
   };
 
   for (let i = 0; i < fotos.length; i++) {
     const foto = fotos[i];
-
-    if (!foto.type.match("image.*")) {
-      console.error("O arquivo selecionado não é uma imagem.");
-      return;
-    }
 
     const reader = new FileReader();
     reader.onload = function (e) {
@@ -480,13 +475,15 @@ $("#btn-salvar-anuncio").click(function () {
 
         console.log("Foto carregada:", fotoDataURL);
 
-        if (novoApartamento.fotos.length === fotos.length) {
+        if (novoApartamento.fotos.length == fotos.length) {
           // Enviar o novo anúncio para a API somente após todas as fotos serem processadas
           criarNovoAnuncio(novoApartamento);
         }
       } else {
         console.error("A imagem não está codificada em base64.");
         console.log(fotoDataURL);
+        novoApartamento.fotos = "";
+        criarNovoAnuncio(novoApartamento);
       }
     };
 
