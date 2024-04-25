@@ -473,8 +473,6 @@ $("#btn-salvar-anuncio").click(function () {
       if (fotoDataURL.startsWith("data:image/")) {
         novoApartamento.fotos.push(fotoDataURL);
 
-        console.log("Foto carregada:", fotoDataURL);
-
         if (novoApartamento.fotos.length == fotos.length) {
           // Enviar o novo anúncio para a API somente após todas as fotos serem processadas
           criarNovoAnuncio(novoApartamento);
